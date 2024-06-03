@@ -5,11 +5,11 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 
 const Login = () => {
-  document.title = "Login - Get Me A Coffee"
   const { data: session } = useSession()
   const router = useRouter() 
 
   useEffect(() => {
+      document.title = "Login - Get Me A Coffee"
       if (session) {
         router.push('/dashboard')
       }

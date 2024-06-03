@@ -8,6 +8,20 @@ import connectDB from '@/db/connectDb'
 // import GoogleProvider from 'next-auth/providers/google'
 // import EmailProvider from 'next-auth/providers/email'
 import GitHubProvider from 'next-auth/providers/github'
+import axios from 'axios'
+
+const getRandomImage = async (type) => {
+  try {
+    const response = await axios.get(`https://picsum.photos/200`, {
+      responseType: 'arraybuffer'
+    })
+    const base64 = Buffer.from(response.data, 'binary').toString('base64')
+    return `data:image/jpeg;base64,${base64}`
+  } catch (error) {
+    console.error(`Error fetching ${type} image:`, error)
+    return null
+  }
+}
 
 export const authOptions = NextAuth({
   providers: [
@@ -40,9 +54,13 @@ export const authOptions = NextAuth({
         await connectDB()
         const currentUser = await User.findOne({ email: email })
         if (!currentUser) {
-          const newUser = new User.create({
+          const profilePicture = await getRandomImage('profile')
+          const coverPicture = await getRandomImage('cover')
+          const newUser = await User.create({
             email: user.email,
             username: user.email.split("@")[0],
+            profilepic: profilePicture,
+            coverpic: coverPicture
           })
         }
         return true

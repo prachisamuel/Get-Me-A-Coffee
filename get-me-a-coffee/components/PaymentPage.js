@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Bounce } from 'react-toastify'
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const PaymentPage = ({username}) => {
     const [paymentform, setPaymentform] = useState({name: "", message: "", amount: ""})
@@ -14,10 +15,16 @@ const PaymentPage = ({username}) => {
     const [payments, setPayments] = useState([])
     const searchParams = useSearchParams()
     const router = useRouter()
+    const { data: session } = useSession()
 
     useEffect(() => {
-        getData()
-    }, [])
+        if (!session) {
+          router.push('/login')
+        }
+        else {
+          getData()
+        }
+    }, [router, session])
 
     useEffect(() => {
         if (searchParams.get("paymentdone") == "true") {
@@ -91,10 +98,10 @@ const PaymentPage = ({username}) => {
         />
         <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
         <div className='cover w-full relative'>
-            <img className='object-cover w-full h-48 md:h-[350] shadow-blue-700 shadow-sm' src={currentUser.coverpic} alt="cover" />
+            <img className='object-fill w-full h-48 md:h-80' src={currentUser.coverpic} alt="cover" />
         </div>
-        <div className='absolute bottom-36 right-[38%] md:right-[45%] border-white border-2 overflow-hidden rounded-full size-36'>
-            <img className='rounded-full object-cover size-36' width={128} height={128} src={currentUser.profilepic} alt="profile" />
+        <div className='absolute top-60 md:top-80 right-[34%] md:right-[41%] lg:right-[45%] border-black border-2 overflow-hidden rounded-full size-36'>
+            <img className='rounded-full object-fill size-36' width={128} height={128} src={currentUser.profilepic} alt="profile" />
         </div>
         <div className='info flex justify-center items-center my-24 mb-32 flex-col gap-2'>
             <div className='font-bold text-lg'>
@@ -114,7 +121,7 @@ const PaymentPage = ({username}) => {
                             {payments.map((p, i) => {
                                 return (
                                     <li key={i} className='my-4 flex gap-2 items-center'>
-                                        <img width={50} src="avatar.gif" alt="avatar" />
+                                        <img width={30} src="avatar.gif" alt="avatar" />
                                         <span>
                                             {p.name} donated <span className='font-bold'>₹{p.amount}</span> with a message "{p.message}"
                                         </span>

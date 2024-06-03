@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Bounce } from 'react-toastify'
 
 const Dashboard = () => {
-  const { data: session, update } = useSession()
+  const { data: session } = useSession()
   const router = useRouter()
   const [form, setForm] = useState({})
   
@@ -90,7 +90,7 @@ const Dashboard = () => {
           </div>
           <div className='my-2'>
             <label htmlFor="razorpaysecret" className='block mb-2 text-sm font-medium'>Razorpay secret</label>
-            <input value={form.razorpaysecret ? form.razorpaysecret : ""} onChange={handleChange} type="text" name='razorpaysecret' id='razorpaysecret' className='block w-full p-2 rounded-lg bg-[#523526] placeholder-white border border-white' />
+            <input value={form.razorpaysecret ? form.razorpaysecret : ""} onChange={handleChange} type="password" name='razorpaysecret' id='razorpaysecret' className='block w-full p-2 rounded-lg bg-[#523526] placeholder-white border border-white' />
           </div>
           <div className='my-6'>
             <button type='submit' className='block text-white bg-gradient-to-br from-[#786C3B] to-[#452B1F] hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-[#452B1F] font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full'>Save</button>
